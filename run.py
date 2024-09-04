@@ -1,10 +1,5 @@
 import argparse
-from pathlib import Path
-from modules.fileutils import get_next_file
-
-def write_categories(f: Path): pass
-
-def write_foods(f: Path): pass
+from modules import fileutils, excel, db
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Write food categories and/or foods into DB.')
@@ -13,8 +8,11 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
 
-    for file in get_next_file():
+    conn = db.init()
+
+    for file in fileutils.get_next_file():
         if not args.f:
-            write_categories(file)
+            category_names = excel.parse_category_names(file)
+            db.write_categories(conn, category_names)
         if not args.c:
-            write_foods(file)
+            pass # TODO
