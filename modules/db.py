@@ -14,3 +14,12 @@ def write_categories(conn: pyodbc.Connection, names: List[str]):
     for name in names:
         c.execute(q, (name))
     c.commit()
+
+def read_categories(conn: pyodbc.Connection) -> dict:
+    c = conn.cursor()
+    q = "SELECT name, id FROM food_categories"
+    c.execute(q)
+    d = {}
+    for row in c.fetchall():
+        d[row[0]] = row[1]
+    return d
