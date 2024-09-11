@@ -18,8 +18,11 @@ if __name__ == "__main__":
     for file in fileutils.get_next_file():
         if not args.f:
             category_names = excel.parse_category_names(file)
-            #db.write_categories(conn, category_names)
+            db.write_categories(conn, category_names)
         if not args.c:
             categories = db.read_categories(conn)
-            breakpoint()
-            pass
+            foods = excel.parse_food_data(file, categories)
+            db.write_foods(conn, foods)
+
+    conn.close()
+    print("OK!")

@@ -23,3 +23,13 @@ def read_categories(conn: pyodbc.Connection) -> dict:
     for row in c.fetchall():
         d[row[0]] = row[1]
     return d
+
+def write_foods(conn: pyodbc.Connection, foods: List[tuple]):
+    c = conn.cursor()
+    q = """INSERT INTO foods 
+    (food_id, name, category, calories, fat, fat_saturated, carbs, fiber, protein, salt, calories_ri, fat_ri, fat_saturated_ri, carbs_ri, protein_ri) 
+    VALUES 
+    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+    for food in foods:
+        c.execute(q, food)
+    c.commit()
